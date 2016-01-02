@@ -65,6 +65,14 @@ defmodule Ch8DictMapsHashTest do
     assert s2.over_18 == true
   end
 
+  test "using Attendee destruct" do
+    a1 = %Ch8.Attendee{ name: "Dave", over_18: true }
+    assert Ch8.Attendee.may_attend_after_party(a1) == false
+
+    a2 = %Ch8.Attendee{ a1 | paid: true}
+    assert Ch8.Attendee.may_attend_after_party(a2) == true
+  end
+
 
 end
 
