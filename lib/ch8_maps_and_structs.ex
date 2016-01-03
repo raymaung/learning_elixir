@@ -18,3 +18,11 @@ defmodule Ch8.Attendee do
     raise "Missing name for badge"
   end
 end
+
+defmodule Ch8.Customer do
+  defstruct name: "", company: ""
+end
+
+defmodule Ch8.BugReport do
+  defstruct owner: %{}, details: "", severity: 1
+end

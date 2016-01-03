@@ -73,6 +73,26 @@ defmodule Ch8DictMapsHashTest do
     assert Ch8.Attendee.may_attend_after_party(a2) == true
   end
 
+  test "nested dictionary structures" do
+
+    report = %Ch8.BugReport {
+      owner: %Ch8.Customer{ name: "Dave", company: "Pragmatic" },
+      details: "broken"
+    }
+    assert report.owner.company == "Pragmatic"
+
+    # Long Verbose Way
+    report = %Ch8.BugReport { report |
+      owner: %Ch8.Customer { report.owner |
+        company: "PragProg"
+      }
+    }
+    assert report.owner.company == "PragProg"
+
+    # Using put_in macro
+    report = put_in(report.owner.company, "PragProg-2")
+    assert report.owner.company == "PragProg-2"
+  end
 
 end
 
