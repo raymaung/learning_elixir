@@ -89,9 +89,76 @@ defmodule Ch8DictMapsHashTest do
     }
     assert report.owner.company == "PragProg"
 
-    # Using put_in macro
+    # Using put_in macro - to update value in nested structure
     report = put_in(report.owner.company, "PragProg-2")
     assert report.owner.company == "PragProg-2"
+
+    # Using update_in to apply function to value
+    report = update_in report.owner.name, &("Mr. " <> &1)
+    assert report.owner.name == "Mr. Dave"
+
+    # Using key symbols for maps or keyword list
+    # Note, it is a simple map - not struct
+    report = %{ owner: %{ name: "Dave", company: "Pragmatic" }, severity: 1}
+    report = put_in report[:owner][:name], "Dave"
+    assert report.owner.name == "Dave"
+  end
+
+  test "update nested structure using dynamic keys" do
+    nested = %{
+      buttercup: %{
+        actor: %{
+          first: "Robin",
+          last: "Wright"
+        },
+        role: "princess"
+      },
+      westley: %{
+        actor: %{
+          first: "Carey",
+          last: "Ewes"
+        },
+        role: "farm boy"
+      }
+    }
+
+    assert get_in(nested, [:buttercup]) == %{
+      actor: %{
+        first: "Robin",
+        last: "Wright"
+      },
+      role: "princess"
+    }
+
+    assert get_in(nested, [:buttercup, :actor]) == %{
+      first: "Robin",
+      last: "Wright"
+    }
+
+    assert get_in(nested, [:buttercup, :actor, :first]) == "Robin"
+  end
+
+  test "dynamic keys - a function as key" do
+    authors = [
+      %{ name: "José", language: "Elixir"  },
+      %{ name: "Matz",  language: "Ruby"    },
+      %{ name: "Larry", language: "Perl"    }
+    ]
+
+    languages_with_an_r = fn
+      (:get, collection, next_fn) ->
+        for row <- collection do
+          if String.contains?(row.language, "r") do
+            next_fn.(row)
+          end
+        end
+      end
+
+    assert get_in(authors, [languages_with_an_r, :name]) == [
+      "José",
+      nil,
+      "Larry"
+    ]
   end
 
 end
