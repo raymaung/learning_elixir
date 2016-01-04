@@ -1,5 +1,5 @@
 defmodule Ch6ModulesAndNamedFunctionsTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   test "simple modules" do
     defmodule Times1 do

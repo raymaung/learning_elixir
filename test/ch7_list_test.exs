@@ -1,5 +1,5 @@
 defmodule Ch7ListTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   test "count list item" do
     defmodule MyList do

@@ -1,5 +1,5 @@
 defmodule Ch5AnonymousFunctionsTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   doctest Ch5AnonymousFunctions
 
