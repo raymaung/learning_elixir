@@ -39,5 +39,62 @@ defmodule Ch10Test do
             |> Enum.to_list
     assert list == [5, 17]
   end
+
+  test "For - syntax examples" do
+    list = for x <- [1, 2], do: x * x
+    assert list == [1, 4]
+
+    list = for x <- [1, 2] do
+            x
+          end
+    assert list == [1, 2]
+
+    list = for x <- [1, 2], y <- ['a', 'b'] do
+      {x, y}
+    end
+    assert list == [ {1, 'a'}, {1, 'b'}, {2, 'a'}, {2, 'b'} ]
+  end
+
+  test "For - with conditions" do
+    first8 = [ 1, 2, 3, 4, 5, 6, 7, 8]
+    list = for x <- first8,
+              y <- first8,
+              x >= y,
+              rem(x * y, 10) == 0 do
+            { x, y }
+    end
+    assert list == [{5, 2}, {5, 4}, {6, 5}, {8, 5}]
+  end
+
+  test "For - deconstrucing element" do
+    reports = [ dallas: :hot, minneapolis: :cold, dc: :muggy, la: :smoggy ]
+    new_reports = for {city, weather} <- reports, do: { weather, city}
+    assert new_reports == [ hot: :dallas, cold: :minneapolis, muggy: :dc, smoggy: :la ]
+  end
+
+  test "For - Works on Bits" do
+    list = for << ch <- "hello" >>, do: ch
+
+    assert list == 'hello'
+    assert list != "hello"
+  end
+
+  test "For - scoping" do
+    name = "Dave"
+    for name <- [ "CAT", "DOG"], do: name
+    assert name == "Dave"
+  end
+
+  test "For - into" do
+    result = for x <- ~w{ cat dog }, into: %{}, do: { x, String.upcase(x) }
+    assert result == %{ "cat" => "CAT", "dog" => "DOG" }
+
+    result = for x <- ~w{ cat dog }, into: Map.new, do: { x, String.upcase(x) }
+    assert result == %{ "cat" => "CAT", "dog" => "DOG" }
+
+    result = for x <- ~w{ cat dog }, into: %{"ant" => "ANT"}, do: { x, String.upcase(x) }
+    assert result == %{"ant" => "ANT", "cat" => "CAT", "dog" => "DOG"}
+  end
+
 end
 
