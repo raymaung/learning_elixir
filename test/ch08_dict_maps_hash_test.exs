@@ -8,7 +8,7 @@ defmodule Ch8DictMapsHashTest do
       end
     end
 
-    hd = [ one: 1, two: 2, three: 3] |> Enum.into HashDict.new
+    hd = [ one: 1, two: 2, three: 3] |> Enum.into(HashDict.new)
     assert Sum.values(hd) == 6
 
     map = %{ four: 4, five: 5, six: 6 }
